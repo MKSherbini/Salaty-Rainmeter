@@ -3,7 +3,7 @@ A widget to show prayer times
 
 ## Features
 
-Dynamically fetchs prayer times and keeps it up to date.
+Dynamically fetchs prayer times and keeps them up to date.
 
 ## Target Platform
 
