@@ -1,0 +1,96 @@
+Some tips for using the RegExp option in Rainmeter with WebParser measures.  This is not a comprehensive guide to regular expressions.  Good tutorials can be found at:
+
+http://www.regular-expressions.info/tutorialcnt.html
+http://www.rexegg.com/
+
+FORMAT:
+
+RegExp=(?siU)search1(.*)endsearch1.*search2(.*)endsearch2
+
+(?siU) : The "s" is a directive that tells the regular expression to treat line break characters (carriage return - linefeed in Windows, linefeed alone in Unix) the same as any other character when searching. By default regular expressions would not include line break characters when "." (any character) is use.
+
+The "i" tells the expression to be "case-insensitive". 
+
+The "U" tells the expression to be "ungreedy" and stop searching when the first match is found.
+
+(.*) : This is a directive that tells RegExp to capture any number of any characters in a "StringIndex". "." means "any character", and "*" means "zero or more times. Each iteration of (.*) in the RegExp pattern will create another StringIndex.
+
+.* : Without the parentheses, this tells RegExp to "skip" any number of any characters.
+
+EXAMPLE: 
+
+(?siU)<title>(.*)</title>.*<item>(.*)</item>
+
+This will return everything between the text "<title>" and "</title>" in StringIndex 1, skip everything between "</title>" and "<item>", then return everything between the text "<item>" and "</item>"
+
+RESERVED CHARACTERS:
+
+There are a few "reserved characters" in Regular Expressions.  They are:
+
+[ \ ^ $ . | ? * + ( { }
+
+If you use these characters in a "search" or "endsearch" component, RegExp will assume they are commands, not text, and the expression will fail.  To use these characters, you must "escape" them with the "\" (backslash) character. Use "\\" to escape the "\" character itself. 
+
+EXAMPLE:
+
+if you have a line of HTML you are searching which looks like this:
+
+<p>Copyright (2014)The Rainmeter Team</p>
+
+and you want to return the person's name, you might use this expression:
+
+(?siU)Copyright (2014)(.*)</p>
+
+The problem is that the "(" and ")" around the year are "reserved characters" and will cause the expression to fail
+
+To solve this problem, you will "escape" the reserved characters:
+
+(?siU)Copyright \(2014\)(.*)</p>
+
+SOME REGEXP COMMANDS:
+
+There are a few important commands you can use in your searches.  These commands are useful for when you need to do a search on data which might be variable (you don't know what it will be each time) and you want to return what is right after the search.  Here are a few common ones you will find useful
+
+^ ==> matches the beginning of the text
+$ ==> matches the end of the text
+\d ==> matches any single number character
+\D ==< matches any single character that is NOT a number character
+\w ==> matches any single "word" character (a-z and 0-9 and underscore)
+\W ==> matches any single character that is NOT a "word" character
+\s ==> matches any single "whitespace" character: space, tab, linefeed, carriage return
+[A-Z]{3} ==> matches alphabet characters exactly 3 times
+[0-9]{1,4} ==> matches number characters at least once and at most 4 times
+[aeiou] ==> matches just vowels (any pattern here will work)
+
+EXAMPLE:
+
+If you had HTML text which looks like this:
+
+<p>The image name as of 12-01-2014 is flowers.png</p>
+
+You want to get the name and extension of the image, but the date will be different the next day when you run it.  So how do we solve this?
+
+(?siU)as of [0-2]{1,2}-[0-3]{0,1}[1-9]-\d{4} is (.*)</p>
+
+So what we are saying is search for "as of"
+
+Then any number 0 through 9 "[0-9](1,2)" at least once and at most twice (could be 1-12 or 01-12 for the month)
+
+Then a dash "-"
+
+Then the numbers 0 through 3 zero or one times "[0-3]{0,1}" the first number of the day (could be a "0" if the format is "01-31" or nothing if the format is "1-31"
+
+Then the numbers 1 through 9 exactly one time. (the last number of the day)
+
+Then a dash "-"
+
+Then any number characters "\d" exactly four times{4}
+
+Then " is "
+
+Return what is between " is " and "</p>"
+
+If you know that the number format is 01-12 and 01-31 then you also could use:
+
+\d\d-\d\d-\d\d\d\d to get the date... (\d matches one number character)  This would also match an improper date like "12-32-2014" but is easier to read then the more exact method
+
