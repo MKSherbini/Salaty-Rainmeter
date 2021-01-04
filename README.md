@@ -10,7 +10,7 @@ Dynamically fetchs prayer times and keeps them up to date.
 The main target platform is PC with [Rainmeter](https://rainmeter.net) installed
 
 ## ScreenShots
-![alt text](Preview/img0.png)
+![alt text](Preview/img1.png)
 
 
 ## Installation
