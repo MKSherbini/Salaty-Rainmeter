@@ -16,7 +16,7 @@ The main target platform is PC with [Rainmeter](https://rainmeter.net) installed
 ## Installation
 
 
-1. Copy Salaty to "Documents/Rainmeter"
+1. Copy Salaty to "Documents/Rainmeter/Skins"
 2. Run Rainmeter and Load the skin
 3. Drag the widget to your favourite position
 
